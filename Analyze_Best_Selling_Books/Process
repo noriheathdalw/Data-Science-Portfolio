@@ -1,0 +1,80 @@
+Step 1: Install and Import pandas 
+  pip3 install pandas
+  import pandas as pd
+
+# Rest of the file go here...
+
+Step 2: Import pandas and Load the Spreadsheet
+  import pandas as pd
+
+df = pd.read_csv('bestsellers.csv')
+
+Step 3: Explore the Data
+  # Get the first 5 rows of the spreadsheet
+print(df.head())
+
+  # Get the shape of the spreadsheet
+print(df.shape)
+
+  # Get the column names of the spreadsheet
+print(df.columns)
+
+  # Get summary statistics for each column
+print(df.describe())
+
+  Name  ...        Genre
+0                      10-Day Green Smoothie Cleanse  ...  Non Fiction
+1                                  11/22/63: A Novel  ...      Fiction
+2            12 Rules for Life: An Antidote to Chaos  ...  Non Fiction
+3                             1984 (Signet Classics)  ...      Fiction
+4  5,000 Awesome Facts (About Everything!) (Natio...  ...  Non Fiction
+
+[5 rows x 7 columns]
+(550, 7)
+Index(['Name', 'Author', 'User Rating', 'Reviews', 'Price', 'Year', 'Genre'], dtype='object')
+       User Rating       Reviews       Price         Year
+count   550.000000    550.000000  550.000000   550.000000
+mean      4.618364  11953.281818   13.100000  2014.000000
+std       0.226980  11731.132017   10.842262     3.165156
+min       3.300000     37.000000    0.000000  2009.000000
+25%       4.500000   4058.000000    7.000000  2011.000000
+50%       4.700000   8580.000000   11.000000  2014.000000
+75%       4.800000  17253.250000   16.000000  2017.000000
+max       4.900000  87841.000000  105.000000  2019.000000
+
+Step 4: Clean the Data 
+  df.drop_duplicates(inplace=True)
+  df.rename(columns={"Name": "Title", "Year": "Publication Year", "User Rating": "Rating"}, inplace=True)
+  df["Price"] = df["Price"].astype(float)
+
+Step 5: Run an Analysis
+  author_counts = df['Author'].value_counts()
+print(author_counts)
+  Author
+Jeff Kinney                           12
+Gary Chapman                          11
+Rick Riordan                          11
+Suzanne Collins                       11
+American Psychological Association    10
+                                      ..
+Keith Richards                         1
+Chris Cleave                           1
+Alice Schertle                         1
+Celeste Ng                             1
+Adam Gasiewski                         1
+Name: count, Length: 248, dtype: int64
+
+  avg_rating_by_genre = df.groupby("Genre")["Rating"].mean()
+  print(avg_rating_by_genre)
+
+  Genre
+  Fiction        4.648333
+  Non Fiction    4.595161
+  Name: Rating, dtype: float64
+
+Step 6: Export the Results
+  # Export top selling authors to a CSV file
+author_counts.head(10).to_csv("top_authors.csv")
+
+# Export average rating by genre to a CSV file
+avg_rating_by_genre.to_csv("avg_rating_by_genre.csv")
